@@ -2,16 +2,17 @@ import api from 'api';
 import React from 'react';
 import { useDispatch } from 'react-redux';
 
-import useCurrent from '@hooks/useCurrent';
 import Box from '@material-ui/core/Box';
 import TextField from '@material-ui/core/TextField';
 import LoadingButton from '@material-ui/lab/LoadingButton';
 import { updateManager } from '@redux/actions';
 
-export default function EditManager() {
-  const dispatch = useDispatch();
+export type EditManagerProps = { manager: any };
 
-  const { current: initialManager } = useCurrent();
+export default function EditManager({
+  manager: initialManager,
+}: EditManagerProps) {
+  const dispatch = useDispatch();
 
   const [manager, setManager] = React.useState(initialManager);
 

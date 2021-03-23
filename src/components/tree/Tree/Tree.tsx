@@ -1,37 +1,30 @@
 import api from 'api';
 import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import Typography from '@material-ui/core/Typography';
+import { useDispatch } from 'react-redux';
+import { NavLink } from 'react-router-dom';
+
+import useState from '@hooks/useState';
 import toString from '@libs/toString';
 import { CircularProgress } from '@material-ui/core';
 import Alert from '@material-ui/core/Alert';
 import AlertTitle from '@material-ui/core/AlertTitle';
-// import ChevronRightIcon from '@material-ui/icons/ChevronRight';
-// import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import TreeItem from '@material-ui/lab/TreeItem';
-import TreeView from '@material-ui/lab/TreeView';
+import Box from '@material-ui/core/Box';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ListItemText from '@material-ui/core/ListItemText';
+import ListSubheader from '@material-ui/core/ListSubheader';
+import AccountTreeIcon from '@material-ui/icons/AccountTree';
+import ManageAccountsIcon from '@material-ui/icons/ManageAccounts';
+import PersonIcon from '@material-ui/icons/Person';
+import { init, setError } from '@redux/actions';
 
-import { init, setError, setCurrent } from '@redux/actions';
-
-import type { State } from '@redux/reducers/treeReducer';
-
-function extractIds(arr: any[]) {
-  const res: any = [];
-
-  arr.forEach((el) => {
-    if (el._id) res.push(el._id);
-    if (el.projects) res.push(...extractIds(el.projects));
-    if (el.managers) res.push(...extractIds(el.managers));
-  });
-
-  return res;
-}
+import { useStyles } from './styles';
 
 export default function Tree() {
-  const { error, isFetching, managers } = useSelector(
-    ({ state }: { state: State }) => state
-  );
+  const { error, isFetching, managers } = useState();
   const dispatch = useDispatch();
+  const classes = useStyles();
 
   React.useEffect(() => {
     api
@@ -45,13 +38,9 @@ export default function Tree() {
       });
   }, [dispatch]);
 
-  const handleTreeItemClick = (user: any) => {
-    dispatch(setCurrent(user));
-  };
-
-  const expanded = React.useMemo(() => {
-    return extractIds(managers);
-  }, [managers]);
+  if (isFetching) {
+    return <CircularProgress />;
+  }
 
   if (error) {
     return (
@@ -63,63 +52,87 @@ export default function Tree() {
   }
 
   return (
-    <div>
-      {isFetching ? (
-        <CircularProgress />
-      ) : (
-        <>
-          <TreeView
-            // defaultCollapseIcon={<ExpandMoreIcon />}
-            // defaultExpandIcon={<ChevronRightIcon />}
-            multiSelect={false}
-            expanded={expanded}
-          >
-            {managers.map((manager) => (
-              <TreeItem
-                key={manager._id}
-                nodeId={manager._id}
-                label={
-                  <Typography variant="body2" color="rgb(26 115 232)">
-                    {`${manager.name} (manager)`}
-                  </Typography>
-                }
-                onClick={() => handleTreeItemClick(manager)}
-              >
-                {Array.isArray(manager.projects) &&
-                  manager.projects.map((project) => (
-                    <TreeItem
-                      key={project._id}
-                      nodeId={project._id}
-                      label={
-                        <Typography variant="body2" color="rgb(227 116 47)">
-                          {`${project.name} (project)`}
-                        </Typography>
-                      }
-                      onClick={() => handleTreeItemClick(project)}
+    <Box>
+      <List
+        component="nav"
+        aria-labelledby="manager-list-subheader"
+        subheader={
+          <ListSubheader component="div" id="manager-list-subheader">
+            {!managers.length ? 'Add the first manager' : 'Navigation'}
+          </ListSubheader>
+        }
+      >
+        {managers.map((manager) => (
+          <React.Fragment key={manager._id}>
+            <ListItem
+              button
+              component={NavLink}
+              activeClassName="Mui-selected"
+              exact
+              to={`/managers/${manager._id}`}
+              className={classes.nested0}
+            >
+              <ListItemIcon className={classes.listItemIcon}>
+                <ManageAccountsIcon />
+              </ListItemIcon>
+              <ListItemText
+                primary={manager.name}
+                // secondary="manager"
+                className={classes.listItemText}
+              />
+            </ListItem>
+            {Array.isArray(manager.projects) && (
+              <List disablePadding>
+                {manager.projects.map((project) => (
+                  <React.Fragment key={project._id}>
+                    <ListItem
+                      button
+                      component={NavLink}
+                      activeClassName="Mui-selected"
+                      exact
+                      to={`/projects/${project._id}`}
+                      className={classes.nested1}
                     >
-                      {Array.isArray(project.developers) &&
-                        project.developers.map((developer: any) => (
-                          <TreeItem
+                      <ListItemIcon className={classes.listItemIcon}>
+                        <AccountTreeIcon />
+                      </ListItemIcon>
+                      <ListItemText
+                        primary={project.name}
+                        // secondary="project"
+                        className={classes.listItemText}
+                      />
+                    </ListItem>
+                    {Array.isArray(project.developers) && (
+                      <List disablePadding>
+                        {project.developers.map((developer: any) => (
+                          <ListItem
                             key={developer._id}
-                            nodeId={developer._id}
-                            label={
-                              <Typography
-                                variant="body2"
-                                color="rgb(162 80 245)"
-                              >
-                                {`${developer.name} (developer)`}
-                              </Typography>
-                            }
-                            onClick={() => handleTreeItemClick(developer)}
-                          />
+                            button
+                            component={NavLink}
+                            activeClassName="Mui-selected"
+                            exact
+                            to={`/developers/${developer._id}`}
+                            className={classes.nested2}
+                          >
+                            <ListItemIcon className={classes.listItemIcon}>
+                              <PersonIcon />
+                            </ListItemIcon>
+                            <ListItemText
+                              primary={developer.name}
+                              // secondary="developer"
+                              className={classes.listItemText}
+                            />
+                          </ListItem>
                         ))}
-                    </TreeItem>
-                  ))}
-              </TreeItem>
-            ))}
-          </TreeView>
-        </>
-      )}
-    </div>
+                      </List>
+                    )}
+                  </React.Fragment>
+                ))}
+              </List>
+            )}
+          </React.Fragment>
+        ))}
+      </List>
+    </Box>
   );
 }

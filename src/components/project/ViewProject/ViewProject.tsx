@@ -3,27 +3,27 @@ import React from 'react';
 import { useDispatch } from 'react-redux';
 
 import DevelopersTable from '@components/developer/DevelopersTable';
+import useCurrentlyEditingID from '@hooks/useCurrentlyEditingID';
+import capitalize from '@libs/capitalize';
 import { Button } from '@material-ui/core';
 import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography';
 import { setCurrentlyEditingID } from '@redux/actions';
 
+import { ProjectProps } from '../@types';
 import EditProject from '../EditProject';
 
-import capitalize from '@libs/capitalize';
-import useCurrent from '@hooks/useCurrent';
 const AddDeveloperDialog = React.lazy(
   () => import('@components/developer/AddDeveloperDialog')
 );
 
-export default function ViewProject() {
-  const dispatch = useDispatch();
+export type ViewProjectProps = { project: ProjectProps };
 
-  const {
-    current: project,
-    current: { _id, developers },
-    currentlyEditingID,
-  } = useCurrent();
+export default function ViewProject({ project }: ViewProjectProps) {
+  const dispatch = useDispatch();
+  const currentlyEditingID = useCurrentlyEditingID();
+
+  const { _id, developers } = project;
 
   const isEditing = React.useMemo(() => {
     return currentlyEditingID === _id;
@@ -80,7 +80,7 @@ export default function ViewProject() {
       </Box>
 
       {isEditing ? (
-        <EditProject />
+        <EditProject project={project} />
       ) : (
         <Box sx={{ width: '100%', marginTop: 3 }}>
           {Object.entries(project).map(

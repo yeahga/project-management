@@ -21,11 +21,11 @@ app.set('views', VIEWS_DIR);
 app.use(STATIC_PATH, express.static('public'));
 app.use(bodyParser.json());
 
-app.get('/', (req, res) => {
+app.use('/api', router);
+
+app.get('*', (req, res) => {
   res.render('main');
 });
-
-app.use('/api', router);
 
 const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));

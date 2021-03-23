@@ -1,4 +1,6 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
+
 import Paper from '@material-ui/core/Paper';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -6,8 +8,10 @@ import TableCell from '@material-ui/core/TableCell';
 import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
-import { useStyles } from './styles';
+import Tooltip from '@material-ui/core/Tooltip';
+
 import { ProjectProps } from '../@types';
+import { useStyles } from './styles';
 
 export type ProjectsTableProps = { projects: ProjectProps[] };
 
@@ -28,15 +32,23 @@ export default function ProjectsTable({ projects }: ProjectsTableProps) {
           {projects.map((project) => (
             <TableRow key={project.name} className={classes.hideLastBorder}>
               <TableCell component="th" scope="project">
-                {project.name || ' - '}
+                <Tooltip title="Go to project" placement="right">
+                  <Link to={`/projects/${project._id}`}>
+                    {project.name || ' - '}
+                  </Link>
+                </Tooltip>
               </TableCell>
               <TableCell align="right">
                 {project.description || ' - '}
               </TableCell>
               <TableCell align="right">
-                {Array.isArray(project.developers)
+                {Array.isArray(project.developers) && project.developers.length
                   ? project.developers.map(({ name, _id }) => (
-                      <p key={_id}>{name}</p>
+                      <p key={_id}>
+                        <Tooltip title="Go to developer" placement="left">
+                          <Link to={`/developers/${_id}`}>{name || ' - '}</Link>
+                        </Tooltip>
+                      </p>
                     ))
                   : ' - '}
               </TableCell>

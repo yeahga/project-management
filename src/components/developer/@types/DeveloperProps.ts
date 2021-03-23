@@ -4,4 +4,5 @@ export type DeveloperProps = {
   email: string;
   phone: string;
   position: string;
+  projectId: string;
 };

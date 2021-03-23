@@ -1,28 +1,26 @@
 import api from 'api';
 import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 
+import useProjects from '@components/project/@hooks/useProjects';
+import Box from '@material-ui/core/Box';
 import FormControl from '@material-ui/core/FormControl';
 import InputLabel from '@material-ui/core/InputLabel';
 import NativeSelect from '@material-ui/core/NativeSelect';
 import TextField from '@material-ui/core/TextField';
 import LoadingButton from '@material-ui/lab/LoadingButton';
-
 import { updateDeveloper } from '@redux/actions';
 
-import type { State } from '@redux/reducers/treeReducer';
-import Box from '@material-ui/core/Box';
+import { DeveloperProps } from '../@types';
 
-export default function EditDeveloper() {
+export type EditDeveloperProps = { developer: DeveloperProps };
+
+export default function EditDeveloper({
+  developer: initialDeveloper,
+}: EditDeveloperProps) {
   const dispatch = useDispatch();
 
-  const initialDeveloper = useSelector(
-    ({ state }: { state: State }) => state.current
-  );
-
-  const projects = useSelector(({ state }: { state: State }) =>
-    state.managers.flatMap((m) => m.projects)
-  );
+  const projects = useProjects();
 
   const [developer, setDeveloper] = React.useState(initialDeveloper);
 

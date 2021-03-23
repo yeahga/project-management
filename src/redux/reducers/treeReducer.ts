@@ -1,34 +1,18 @@
+import { ManagerProps } from '@components/manager/@types';
+
 import {
-  APPEND_DEVELOPER,
-  APPEND_MANAGER,
-  APPEND_PROJECT,
-  GO_HOME,
-  INIT,
-  SET_CURRENT,
-  SET_CURRENTLY_EDITING_ID,
-  SET_ERROR,
-  UPDATE_DEVELOPER,
-  UPDATE_MANAGER,
-  UPDATE_PROJECT,
+    APPEND_DEVELOPER, APPEND_MANAGER, APPEND_PROJECT, INIT, SET_CURRENTLY_EDITING_ID, SET_ERROR,
+    UPDATE_DEVELOPER, UPDATE_MANAGER, UPDATE_PROJECT
 } from '../actionTypes';
 
 import type { Type } from '../actionTypes';
-
 type Payload = any;
 type Action = { type: Type; payload: Payload };
 
-type Manager = {
-  _id: string;
-  name: string;
-  type: 'manager';
-  projects: any[];
-};
-
 export type State = {
-  managers: Manager[];
+  managers: ManagerProps[];
   error: any;
   isFetching: boolean;
-  current: any;
   currentlyEditingID: null | string;
 };
 
@@ -36,7 +20,6 @@ export const initialState: State = {
   managers: [],
   error: false,
   isFetching: true,
-  current: null,
   currentlyEditingID: null,
 };
 
@@ -56,9 +39,6 @@ export const treeReducer = (state = initialState, action: Action): State => {
     case APPEND_MANAGER:
       return { ...state, managers: [...state.managers, action.payload] };
 
-    case SET_CURRENT:
-      return { ...state, current: action.payload };
-
     case SET_CURRENTLY_EDITING_ID:
       return { ...state, currentlyEditingID: action.payload };
 
@@ -68,7 +48,6 @@ export const treeReducer = (state = initialState, action: Action): State => {
         managers: state.managers.map((m) =>
           m._id === action.payload._id ? { ...m, ...action.payload } : m
         ),
-        current: state.current ? { ...state.current, ...action.payload } : null,
         currentlyEditingID: null,
       };
 
@@ -95,9 +74,6 @@ export const treeReducer = (state = initialState, action: Action): State => {
           });
           return m;
         }),
-        current: state.current
-          ? { ...action.payload, developers: state.current.developers }
-          : null,
         currentlyEditingID: null,
       };
 
@@ -130,14 +106,6 @@ export const treeReducer = (state = initialState, action: Action): State => {
           });
           return m;
         }),
-        current: state.current ? { ...action.payload } : null,
-        currentlyEditingID: null,
-      };
-
-    case GO_HOME:
-      return {
-        ...state,
-        current: null,
         currentlyEditingID: null,
       };
 

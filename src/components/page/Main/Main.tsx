@@ -1,30 +1,51 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
+import { Route, Switch } from 'react-router-dom';
 
-import ViewDeveloper from '@components/developer/ViewDeveloper';
-import ViewManager from '@components/manager/ViewManager';
-import ViewProject from '@components/project/ViewProject';
+import DeveloperRoute from '@components/developer/DeveloperRoute';
+import ManagerRoute from '@components/manager/ManagerRoute';
+import ProjectRoute from '@components/project/ProjectRoute';
 import Task from '@components/task/Task';
+import useState from '@hooks/useState';
+import toString from '@libs/toString';
+import Alert from '@material-ui/core/Alert';
+import AlertTitle from '@material-ui/core/AlertTitle';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
+import NoMatch from '../NoMatch';
 import { useStyles } from './styles';
 
-import type { State } from '@redux/reducers/treeReducer';
 export default function Main() {
   const classes = useStyles();
-
-  const current = useSelector(({ state }: { state: State }) => state.current);
+  const { error, isFetching } = useState();
 
   return (
     <main className={classes.content}>
       <div className={classes.toolbar} />
-      {current?.type === 'manager' ? (
-        <ViewManager />
-      ) : current?.type === 'project' ? (
-        <ViewProject />
-      ) : current?.type === 'developer' ? (
-        <ViewDeveloper />
+      {isFetching ? (
+        <CircularProgress />
+      ) : error ? (
+        <Alert severity="error">
+          <AlertTitle>Error</AlertTitle>
+          {toString(error.error || error.message || error)}
+        </Alert>
       ) : (
-        <Task />
+        <Switch>
+          <Route exact strict path="/">
+            <Task />
+          </Route>
+          <Route exact strict path="/managers/:managerId">
+            <ManagerRoute />
+          </Route>
+          <Route exact strict path="/projects/:projectId">
+            <ProjectRoute />
+          </Route>
+          <Route exact strict path="/developers/:developerId">
+            <DeveloperRoute />
+          </Route>
+          <Route>
+            <NoMatch />
+          </Route>
+        </Switch>
       )}
     </main>
   );
