@@ -10,7 +10,7 @@ const DeveloperSchema = new Schema({
     required: true,
   },
   phone: {
-    type: Number,
+    type: Number || String,
     unique: true,
   },
   position: {

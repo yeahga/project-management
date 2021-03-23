@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 
 import { Developer } from './model';
+import validate from './validate';
 
 export const getAllDevelopers = async (req: Request, res: Response) => {
   const developers = await Developer.find({});
@@ -9,12 +10,13 @@ export const getAllDevelopers = async (req: Request, res: Response) => {
 };
 
 export const createDeveloper = async (req: Request, res: Response) => {
-  const type = 'developer';
+  const { data, error } = validate(req.body);
+  if (error) return res.json({ error });
 
-  Developer.create({ ...req.body, type }, (error, data) => {
+  Developer.create({ ...data }, (error, dev) => {
     if (error) return res.json({ error });
-    const { _id } = data;
-    res.json({ success: true, data: { ...req.body, _id, type } });
+    const { _id } = dev;
+    res.json({ success: true, data: { ...data, _id } });
   });
 };
 
@@ -30,19 +32,15 @@ export const getDeveloperById = async (req: Request, res: Response) => {
 
 export const updateDeveloper = async (req: Request, res: Response) => {
   const { developerId: _id } = req.params;
-  const { name, email, phone, position, projectId } = req.body;
-  const type = 'developer';
-  const data = {
-    name,
-    email,
-    phone,
-    position,
-    projectId,
-    type,
-  };
 
-  Developer.updateOne({ _id }, { $set: data }, {}, (error) => {
-    if (error) res.json({ error });
-    else res.json({ success: true, data: { ...data, _id } });
-  });
+  try {
+    const { data, error } = validate(req.body);
+    if (error) throw error;
+
+    await Developer.updateOne({ _id }, { $set: data }, {});
+
+    res.json({ success: true, data: { ...data, _id } });
+  } catch (error) {
+    res.json({ error });
+  }
 };
