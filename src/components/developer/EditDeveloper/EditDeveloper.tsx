@@ -55,8 +55,6 @@ export default function EditDeveloper({
       })
       .catch((error) => {
         setError(error);
-      })
-      .finally(() => {
         setIsPending(false);
       });
   };
