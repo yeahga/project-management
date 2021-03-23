@@ -1,42 +1,51 @@
 import api from 'api';
 import React from 'react';
 import { useDispatch } from 'react-redux';
+
+import useProjects from '@components/project/@hooks/useProjects';
+import capitalize from '@libs/capitalize';
 import toString from '@libs/toString';
 import Alert from '@material-ui/core/Alert';
 import AlertTitle from '@material-ui/core/AlertTitle';
-import useProjects from '@components/project/@hooks/useProjects';
 import Box from '@material-ui/core/Box';
 import FormControl from '@material-ui/core/FormControl';
 import InputLabel from '@material-ui/core/InputLabel';
 import NativeSelect from '@material-ui/core/NativeSelect';
 import TextField from '@material-ui/core/TextField';
 import LoadingButton from '@material-ui/lab/LoadingButton';
-import { updateDeveloper } from '@redux/actions';
+import { appendDeveloper } from '@redux/actions';
 
-import { DeveloperProps } from '../@types';
+export type AddDeveloperFormProps = {
+  projectId?: string | null;
+  onClose?: () => void;
+};
 
-export type EditDeveloperProps = { developer: DeveloperProps };
-
-export default function EditDeveloper({
-  developer: initialDeveloper,
-}: EditDeveloperProps) {
+export default function AddDeveloperForm({
+  onClose,
+  projectId: initialProjectId,
+}: AddDeveloperFormProps) {
   const dispatch = useDispatch();
   const projects = useProjects();
 
-  const [developer, setDeveloper] = React.useState(initialDeveloper);
+  const [developer, setDeveloper] = React.useState({
+    projectId: initialProjectId || projects[0]._id,
+    name: '',
+    email: '',
+    phone: '',
+    position: '',
+  });
+
   const [error, setError] = React.useState<any>(null);
   const [isPending, setIsPending] = React.useState<any>(false);
 
-  const handleChange = (key: string) => (
-    event: any /* React.ChangeEvent<HTMLInputElement> */
-  ) => {
-    setDeveloper((developer: any) => ({
+  const handleChange = (key: string) => (event: React.ChangeEvent<any>) => {
+    setDeveloper((developer) => ({
       ...developer,
       [key]: event.target.value,
     }));
   };
 
-  const handleSublit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleCreate = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     if (isPending) return;
@@ -44,25 +53,32 @@ export default function EditDeveloper({
 
     setError(null);
 
-    api
-      .put(`/developers/${developer._id}`, {
-        ...developer,
-      })
-      .then(({ data: { error, data } }) => {
-        if (error) throw error;
+    try {
+      const {
+        data: { error, data },
+      } = await api.post('/developers', { ...developer });
 
-        dispatch(updateDeveloper(data));
-      })
-      .catch((error) => {
+      if (error) throw error;
+
+      dispatch(appendDeveloper(data));
+
+      onClose?.();
+    } catch (error) {
+      // TODO: map error codes?
+      if (error.code === 11000 && 'keyPattern' in error) {
+        setError(
+          capitalize(Object.keys(error.keyPattern)[0]) + ' already in use'
+        );
+      } else {
         setError(error);
-      })
-      .finally(() => {
-        setIsPending(false);
-      });
+      }
+    } finally {
+      setIsPending(false);
+    }
   };
 
   return (
-    <Box sx={{ width: '100%', marginTop: 3 }}>
+    <Box>
       {Boolean(error) && (
         <Alert severity="error">
           <AlertTitle>Error</AlertTitle>
@@ -70,7 +86,7 @@ export default function EditDeveloper({
         </Alert>
       )}
       <div>
-        <form onSubmit={handleSublit}>
+        <form onSubmit={handleCreate}>
           <TextField
             autoFocus
             margin="dense"
@@ -79,20 +95,21 @@ export default function EditDeveloper({
             type="text"
             fullWidth
             variant="standard"
-            value={developer.name}
+            value={developer.name || ''}
             onChange={handleChange('name')}
-            required
+            // required
           />
           <TextField
             margin="dense"
             id="email"
             label="Email"
+            // type="email"
             type="text"
             fullWidth
             variant="standard"
-            value={developer.email}
+            value={developer.email || ''}
             onChange={handleChange('email')}
-            required
+            // required
           />
           <TextField
             margin="dense"
@@ -101,7 +118,7 @@ export default function EditDeveloper({
             type="text"
             fullWidth
             variant="standard"
-            value={developer.phone}
+            value={developer.phone || ''}
             onChange={handleChange('phone')}
           />
           <TextField
@@ -111,9 +128,10 @@ export default function EditDeveloper({
             type="text"
             fullWidth
             variant="standard"
-            value={developer.position}
+            value={developer.position || ''}
             onChange={handleChange('position')}
           />
+
           <FormControl fullWidth>
             <InputLabel htmlFor="select-project">Project</InputLabel>
             <NativeSelect
@@ -142,7 +160,7 @@ export default function EditDeveloper({
               variant="contained"
               type="submit"
             >
-              Save
+              Create
             </LoadingButton>
           </Box>
         </form>

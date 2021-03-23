@@ -31,7 +31,7 @@ export default function DevelopersTable({ developers }: DevelopersTableProps) {
         </TableHead>
         <TableBody>
           {developers.map((developer) => (
-            <TableRow key={developer.name} className={classes.hideLastBorder}>
+            <TableRow key={developer._id} className={classes.hideLastBorder}>
               <TableCell component="th" scope="developer">
                 <Tooltip title="Go to developer" placement="right">
                   <Link to={`/developers/${developer._id}`}>
