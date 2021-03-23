@@ -31,7 +31,7 @@ export default function EditProject({
     event.preventDefault();
 
     api
-      .patch(`/projects/${project._id}`, {
+      .put(`/projects/${project._id}`, {
         ...project,
       })
       .then(({ data: { error, data } }) => {

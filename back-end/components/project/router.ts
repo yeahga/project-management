@@ -12,6 +12,6 @@ const router = Router();
 router.get('/', getAllProjects);
 router.post('/', createProject);
 router.get('/:projectId', getProjectById);
-router.patch('/:projectId', updateProject);
+router.put('/:projectId', updateProject);
 
 export default router;

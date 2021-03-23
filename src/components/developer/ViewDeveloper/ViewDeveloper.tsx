@@ -66,13 +66,12 @@ export default function ViewDeveloper({ developer }: ViewDeveloperProps) {
         <EditDeveloper developer={developer} />
       ) : (
         <Box sx={{ width: '100%', marginTop: 3 }}>
-          {Object.entries(developer).map(
-            ([key, val], idx) =>
-              !['__v', '_id', 'projectId', 'type'].includes(key) && (
-                <Typography key={idx} variant="h6" gutterBottom component="div">
-                  {capitalize(key)}: {val}
-                </Typography>
-              )
+          {Object.entries(developer).map(([key, val], idx) =>
+            !['__v', '_id', 'projectId', 'type'].includes(key) && val !== '' ? (
+              <Typography key={idx} variant="h6" gutterBottom component="div">
+                {capitalize(key)}: {val}
+              </Typography>
+            ) : null
           )}
         </Box>
       )}

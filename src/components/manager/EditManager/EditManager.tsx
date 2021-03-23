@@ -29,7 +29,7 @@ export default function EditManager({
     event.preventDefault();
 
     api
-      .patch(`/managers/${manager._id}`, {
+      .put(`/managers/${manager._id}`, {
         ...manager,
       })
       .then(({ data: { error, data } }) => {

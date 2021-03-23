@@ -30,7 +30,7 @@ export default function ProjectsTable({ projects }: ProjectsTableProps) {
         </TableHead>
         <TableBody>
           {projects.map((project) => (
-            <TableRow key={project.name} className={classes.hideLastBorder}>
+            <TableRow key={project._id} className={classes.hideLastBorder}>
               <TableCell component="th" scope="project">
                 <Tooltip title="Go to project" placement="right">
                   <Link to={`/projects/${project._id}`}>

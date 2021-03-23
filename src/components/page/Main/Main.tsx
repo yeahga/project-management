@@ -13,6 +13,7 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 
 import NoMatch from '../NoMatch';
 import { useStyles } from './styles';
+import AddDeveloperPage from '@components/developer/AddDeveloperPage';
 
 export default function Main() {
   const classes = useStyles();
@@ -41,6 +42,9 @@ export default function Main() {
           </Route>
           <Route exact strict path="/developers/:developerId">
             <DeveloperRoute />
+          </Route>
+          <Route exact strict path="/add-developer">
+            <AddDeveloperPage />
           </Route>
           <Route>
             <NoMatch />

@@ -12,10 +12,7 @@ import { setCurrentlyEditingID } from '@redux/actions';
 
 import { ProjectProps } from '../@types';
 import EditProject from '../EditProject';
-
-const AddDeveloperDialog = React.lazy(
-  () => import('@components/developer/AddDeveloperDialog')
-);
+import { Link } from 'react-router-dom';
 
 export type ViewProjectProps = { project: ProjectProps };
 
@@ -47,16 +44,6 @@ export default function ViewProject({ project }: ViewProjectProps) {
       });
   };
 
-  const [isOpen, setIsOpen] = React.useState(false);
-
-  const handleOpen = () => {
-    setIsOpen(true);
-  };
-
-  const handleClose = () => {
-    setIsOpen(false);
-  };
-
   return (
     <div>
       <Box
@@ -70,7 +57,11 @@ export default function ViewProject({ project }: ViewProjectProps) {
           <Button variant="contained" onClick={handleToggle}>
             {isEditing ? 'Cancel Edit' : 'Edit Project'}
           </Button>
-          <Button variant="contained" onClick={handleOpen}>
+          <Button
+            variant="contained"
+            component={Link}
+            to={`/add-developer?projectId=${_id}`}
+          >
             Add Developer
           </Button>
           <Button variant="contained" onClick={handleDelete}>
@@ -103,14 +94,6 @@ export default function ViewProject({ project }: ViewProjectProps) {
           )}
         </Box>
       )}
-
-      <React.Suspense fallback={null}>
-        <AddDeveloperDialog
-          projectId={_id}
-          isOpen={isOpen}
-          onClose={handleClose}
-        />
-      </React.Suspense>
     </div>
   );
 }
