@@ -15,6 +15,11 @@ import TextField from '@material-ui/core/TextField';
 import LoadingButton from '@material-ui/lab/LoadingButton';
 import { appendDeveloper } from '@redux/actions';
 
+import useDropCache from './@hooks/useDropCache';
+import useInitialData from './@hooks/useInitialData';
+import useSaveToCache from './@hooks/useSaveToCache';
+import { initialDeveloper } from '../initialDeveloper';
+
 export type AddDeveloperFormProps = {
   projectId?: string | null;
   onClose?: () => void;
@@ -26,17 +31,21 @@ export default function AddDeveloperForm({
 }: AddDeveloperFormProps) {
   const dispatch = useDispatch();
   const projects = useProjects();
+  const initialDev = useInitialData(initialProjectId || projects[0]._id);
+  const dropCache = useDropCache();
 
-  const [developer, setDeveloper] = React.useState({
-    projectId: initialProjectId || projects[0]._id,
-    name: '',
-    email: '',
-    phone: '',
-    position: '',
-  });
-
+  const [developer, setDeveloper] = React.useState({ ...initialDev });
   const [error, setError] = React.useState<any>(null);
   const [isPending, setIsPending] = React.useState<any>(false);
+
+  useSaveToCache(developer);
+
+  function reset() {
+    setDeveloper({
+      ...initialDeveloper,
+      projectId: initialProjectId || projects[0]._id,
+    });
+  }
 
   const handleChange = (key: string) => (event: React.ChangeEvent<any>) => {
     setDeveloper((developer) => ({
@@ -62,7 +71,8 @@ export default function AddDeveloperForm({
 
       dispatch(appendDeveloper(data));
 
-      onClose?.();
+      dropCache();
+      (onClose || reset)();
     } catch (error) {
       // TODO: map error codes?
       if (error.code === 11000 && 'keyPattern' in error) {
@@ -97,19 +107,18 @@ export default function AddDeveloperForm({
             variant="standard"
             value={developer.name || ''}
             onChange={handleChange('name')}
-            // required
+            required
           />
           <TextField
             margin="dense"
             id="email"
             label="Email"
-            // type="email"
-            type="text"
+            type="email"
             fullWidth
             variant="standard"
             value={developer.email || ''}
             onChange={handleChange('email')}
-            // required
+            required
           />
           <TextField
             margin="dense"
