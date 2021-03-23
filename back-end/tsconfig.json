@@ -1,0 +1,25 @@
+{
+  "compilerOptions": {
+    "outDir": "../build/",
+    "sourceMap": false,
+    "noImplicitAny": true,
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "target": "ES2020",
+    "jsx": "react",
+    "allowJs": false,
+    "checkJs": false,
+    "alwaysStrict": true,
+    "strictNullChecks": true,
+    "strictFunctionTypes": true,
+    "strictPropertyInitialization": true,
+    "strictBindCallApply": true,
+    "noImplicitThis": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "baseUrl": "./",
+    "paths": {
+      "@config": ["@config"]
+    }
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "compilerOptions": {
+    "outDir": "../public/",
+    "sourceMap": true,
+    "noImplicitAny": true,
+    "module": "ESNext",
+    "moduleResolution": "node",
+    "target": "ES2019",
+    "jsx": "react",
+    "allowJs": true,
+    "resolveJsonModule": true,
+    "checkJs": false,
+    "alwaysStrict": true,
+    "strictNullChecks": true,
+    "strictFunctionTypes": true,
+    "strictPropertyInitialization": true,
+    "strictBindCallApply": true,
+    "noImplicitThis": true,
+    "esModuleInterop": true,
+    "baseUrl": "./",
+    "paths": {
+      "@components/*": ["components/*"],
+      "@redux/*": ["redux/*"]
+    }
+  }
+}
