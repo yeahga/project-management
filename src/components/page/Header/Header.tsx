@@ -1,24 +1,16 @@
-import AppBar from '@material-ui/core/AppBar';
-import HomeIcon from '@material-ui/icons/Home';
-import IconButton from '@material-ui/core/IconButton';
 import React from 'react';
+import { Link } from 'react-router-dom';
+
+import AppBar from '@material-ui/core/AppBar';
+import IconButton from '@material-ui/core/IconButton';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
-import { goHome } from '@redux/actions';
-import useCurrent from '@hooks/useCurrent';
-import { useDispatch } from 'react-redux';
+import HomeIcon from '@material-ui/icons/Home';
+
 import { useStyles } from './styles';
 
 export default function Header() {
   const classes = useStyles();
-
-  const { current } = useCurrent();
-
-  const dispatch = useDispatch();
-
-  const handleHome = () => {
-    dispatch(goHome());
-  };
 
   return (
     <AppBar position="fixed" className={classes.appBar}>
@@ -29,9 +21,15 @@ export default function Header() {
           noWrap
           component="div"
         >
-          {current ? `${current.type}: ${current.name}` : 'Itransition'}
+          {'Itransition'}
         </Typography>
-        <IconButton aria-label="main page" onClick={handleHome} color="inherit">
+
+        <IconButton
+          to="/"
+          aria-label="main page"
+          component={Link}
+          color="inherit"
+        >
           <HomeIcon />
         </IconButton>
       </Toolbar>

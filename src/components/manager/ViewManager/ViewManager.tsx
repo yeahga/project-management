@@ -3,27 +3,27 @@ import React from 'react';
 import { useDispatch } from 'react-redux';
 
 import ProjectsTable from '@components/project/ProjectsTable';
-import useCurrent from '@hooks/useCurrent';
+import useCurrentlyEditingID from '@hooks/useCurrentlyEditingID';
 import capitalize from '@libs/capitalize';
 import { Button } from '@material-ui/core';
 import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography';
 import { setCurrentlyEditingID } from '@redux/actions';
 
+import { ManagerProps } from '../@types';
 import EditManager from '../EditManager';
 
 const AddProjectDialog = React.lazy(
   () => import('@components/project/AddProjectDialog')
 );
 
-export default function ViewManager() {
-  const dispatch = useDispatch();
+export type ViewManagerProps = { manager: ManagerProps };
 
-  const {
-    current: manager,
-    current: { _id, projects },
-    currentlyEditingID,
-  } = useCurrent();
+export default function ViewManager({ manager }: ViewManagerProps) {
+  const dispatch = useDispatch();
+  const currentlyEditingID = useCurrentlyEditingID();
+
+  const { _id, projects } = manager;
 
   const isEditing = React.useMemo(() => {
     return currentlyEditingID === _id;
@@ -80,7 +80,7 @@ export default function ViewManager() {
       </Box>
 
       {isEditing ? (
-        <EditManager />
+        <EditManager manager={manager} />
       ) : (
         <Box sx={{ width: '100%', marginTop: 3 }}>
           {Object.entries(manager).map(

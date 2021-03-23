@@ -2,23 +2,23 @@ import api from 'api';
 import React from 'react';
 import { useDispatch } from 'react-redux';
 
+import useCurrentlyEditingID from '@hooks/useCurrentlyEditingID';
 import capitalize from '@libs/capitalize';
 import { Button } from '@material-ui/core';
 import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography';
 import { setCurrentlyEditingID } from '@redux/actions';
 
+import { DeveloperProps } from '../@types';
 import EditDeveloper from '../EditDeveloper';
-import useCurrent from '@hooks/useCurrent';
 
-export default function ViewDeveloper() {
+export type ViewDeveloperProps = { developer: DeveloperProps };
+export default function ViewDeveloper({ developer }: ViewDeveloperProps) {
   const dispatch = useDispatch();
 
-  const {
-    current: developer,
-    current: { _id },
-    currentlyEditingID,
-  } = useCurrent();
+  const currentlyEditingID = useCurrentlyEditingID();
+
+  const { _id } = developer;
 
   const isEditing = React.useMemo(() => {
     return currentlyEditingID === _id;
@@ -63,7 +63,7 @@ export default function ViewDeveloper() {
       </Box>
 
       {isEditing ? (
-        <EditDeveloper />
+        <EditDeveloper developer={developer} />
       ) : (
         <Box sx={{ width: '100%', marginTop: 3 }}>
           {Object.entries(developer).map(

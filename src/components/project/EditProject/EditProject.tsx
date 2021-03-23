@@ -2,16 +2,19 @@ import api from 'api';
 import React from 'react';
 import { useDispatch } from 'react-redux';
 
-import useCurrent from '@hooks/useCurrent';
 import Box from '@material-ui/core/Box';
 import TextField from '@material-ui/core/TextField';
 import LoadingButton from '@material-ui/lab/LoadingButton';
 import { updateProject } from '@redux/actions';
 
-export default function EditProject() {
-  const dispatch = useDispatch();
+import { ProjectProps } from '../@types';
 
-  const { current: initialProject } = useCurrent();
+export type EditProjectProps = { project: ProjectProps };
+
+export default function EditProject({
+  project: initialProject,
+}: EditProjectProps) {
+  const dispatch = useDispatch();
 
   const [project, setProject] = React.useState(initialProject);
 

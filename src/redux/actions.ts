@@ -1,16 +1,6 @@
 import {
-  APPEND_DEVELOPER,
-  APPEND_MANAGER,
-  APPEND_PROJECT,
-  DELETE_MANAGER,
-  GO_HOME,
-  INIT,
-  SET_CURRENT,
-  SET_CURRENTLY_EDITING_ID,
-  SET_ERROR,
-  UPDATE_DEVELOPER,
-  UPDATE_MANAGER,
-  UPDATE_PROJECT,
+    APPEND_DEVELOPER, APPEND_MANAGER, APPEND_PROJECT, DELETE_MANAGER, INIT,
+    SET_CURRENTLY_EDITING_ID, SET_ERROR, UPDATE_DEVELOPER, UPDATE_MANAGER, UPDATE_PROJECT
 } from './actionTypes';
 
 export function init(payload: any) {
@@ -30,13 +20,6 @@ export function setError(payload: any) {
 export function appendManager(payload: any) {
   return {
     type: APPEND_MANAGER,
-    payload,
-  };
-}
-
-export function setCurrent(payload: any) {
-  return {
-    type: SET_CURRENT,
     payload,
   };
 }
@@ -87,11 +70,5 @@ export function updateDeveloper(payload: any) {
   return {
     type: UPDATE_DEVELOPER,
     payload,
-  };
-}
-
-export function goHome() {
-  return {
-    type: GO_HOME,
   };
 }

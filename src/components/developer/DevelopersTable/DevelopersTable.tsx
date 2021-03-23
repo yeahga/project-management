@@ -1,4 +1,6 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
+
 import Paper from '@material-ui/core/Paper';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -6,9 +8,11 @@ import TableCell from '@material-ui/core/TableCell';
 import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
-import { useStyles } from './styles';
-import type { DeveloperProps } from '../@types';
+import Tooltip from '@material-ui/core/Tooltip';
 
+import { useStyles } from './styles';
+
+import type { DeveloperProps } from '../@types';
 export type DevelopersTableProps = { developers: DeveloperProps[] };
 
 export default function DevelopersTable({ developers }: DevelopersTableProps) {
@@ -29,7 +33,11 @@ export default function DevelopersTable({ developers }: DevelopersTableProps) {
           {developers.map((developer) => (
             <TableRow key={developer.name} className={classes.hideLastBorder}>
               <TableCell component="th" scope="developer">
-                {developer.name || ' - '}
+                <Tooltip title="Go to developer" placement="right">
+                  <Link to={`/developers/${developer._id}`}>
+                    {developer.name || ' - '}
+                  </Link>
+                </Tooltip>
               </TableCell>
               <TableCell align="right">{developer.email || ' - '}</TableCell>
               <TableCell align="right">{developer.phone || ' - '}</TableCell>

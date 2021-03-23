@@ -1,3 +1,4 @@
+import api from 'api';
 import React from 'react';
 import { useDispatch } from 'react-redux';
 
@@ -9,7 +10,6 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import TextField from '@material-ui/core/TextField';
 import LoadingButton from '@material-ui/lab/LoadingButton';
 import { appendDeveloper } from '@redux/actions';
-import api from 'api';
 
 export type AddDeveloperFormProps = {
   projectId: string;

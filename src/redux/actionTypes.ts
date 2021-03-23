@@ -1,6 +1,5 @@
 export const INIT = 'INIT';
 export const SET_ERROR = 'SET_ERROR';
-export const SET_CURRENT = 'SET_CURRENT';
 export const SET_CURRENTLY_EDITING_ID = 'SET_CURRENTLY_EDITING_ID';
 export const APPEND_MANAGER = 'APPEND_MANAGER';
 export const UPDATE_MANAGER = 'UPDATE_MANAGER';
@@ -24,5 +23,4 @@ export type Type =
   | 'DELETE_PROJECT'
   | 'APPEND_DEVELOPER'
   | 'DELETE_DEVELOPER'
-  | 'UPDATE_DEVELOPER'
-  | 'GO_HOME';
+  | 'UPDATE_DEVELOPER';
