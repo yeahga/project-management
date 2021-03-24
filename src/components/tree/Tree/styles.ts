@@ -1,7 +1,10 @@
-import { makeStyles, createStyles } from '@material-ui/core/styles';
+import { createStyles, Theme, makeStyles } from '@material-ui/core/styles';
 
-export const useStyles = makeStyles(() =>
+export const useStyles = makeStyles((theme: Theme) =>
   createStyles({
+    treeRoot: {
+      backgroundColor: theme.palette.background.paper,
+    },
     listItemIcon: {
       minWidth: '36px !important',
     },

@@ -1,8 +1,16 @@
 import { ManagerProps } from '@components/manager/@types';
 
 import {
-    APPEND_DEVELOPER, APPEND_MANAGER, APPEND_PROJECT, INIT, SET_CURRENTLY_EDITING_ID, SET_ERROR,
-    UPDATE_DEVELOPER, UPDATE_MANAGER, UPDATE_PROJECT
+  APPEND_DEVELOPER,
+  APPEND_MANAGER,
+  APPEND_PROJECT,
+  INIT,
+  SET_CURRENTLY_EDITING_ID,
+  SET_ERROR,
+  UPDATE_DEVELOPER,
+  UPDATE_MANAGER,
+  UPDATE_PROJECT,
+  MOVE_DEVELOPER,
 } from '../actionTypes';
 
 import type { Type } from '../actionTypes';
@@ -107,6 +115,24 @@ export const treeReducer = (state = initialState, action: Action): State => {
           return m;
         }),
         currentlyEditingID: null,
+      };
+
+    case MOVE_DEVELOPER:
+      return {
+        ...state,
+        managers: state.managers.map((m) => {
+          m.projects.map((p) => {
+            if (p._id === action.payload.sourceProjectId) {
+              p.developers = p.developers.filter(
+                (d) => d._id !== action.payload.developer._id
+              );
+            } else if (p._id === action.payload.destProjectId) {
+              p.developers = [...p.developers, action.payload.developer];
+            }
+            return p;
+          });
+          return m;
+        }),
       };
 
     default:

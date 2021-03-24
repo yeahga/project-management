@@ -8,7 +8,7 @@ export const APPEND_PROJECT = 'APPEND_PROJECT';
 export const UPDATE_PROJECT = 'UPDATE_PROJECT';
 export const APPEND_DEVELOPER = 'APPEND_DEVELOPER';
 export const UPDATE_DEVELOPER = 'UPDATE_DEVELOPER';
-export const GO_HOME = 'GO_HOME';
+export const MOVE_DEVELOPER = 'MOVE_DEVELOPER';
 
 export type Type =
   | 'INIT'
@@ -23,4 +23,5 @@ export type Type =
   | 'DELETE_PROJECT'
   | 'APPEND_DEVELOPER'
   | 'DELETE_DEVELOPER'
-  | 'UPDATE_DEVELOPER';
+  | 'UPDATE_DEVELOPER'
+  | 'MOVE_DEVELOPER';
