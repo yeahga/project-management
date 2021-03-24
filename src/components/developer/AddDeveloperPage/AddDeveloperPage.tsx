@@ -1,13 +1,9 @@
 import React from 'react';
 
+import useQuery from '@hooks/useQuery';
 import Box from '@material-ui/core/Box';
 
 import AddDeveloperForm from '../AddDeveloperForm';
-import { useLocation } from 'react-router-dom';
-
-function useQuery() {
-  return new URLSearchParams(useLocation().search);
-}
 
 export default function AddDeveloperPage() {
   const query = useQuery();

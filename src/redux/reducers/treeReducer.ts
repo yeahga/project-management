@@ -64,7 +64,7 @@ export const treeReducer = (state = initialState, action: Action): State => {
         ...state,
         managers: state.managers.map((m) => {
           if (m._id === action.payload.managerId) {
-            m.projects = [...(m.projects || []), action.payload];
+            m.projects = [...m.projects, action.payload];
           }
           return m;
         }),
@@ -74,7 +74,7 @@ export const treeReducer = (state = initialState, action: Action): State => {
       return {
         ...state,
         managers: state.managers.map((m) => {
-          (m.projects || []).map((p) => {
+          m.projects = m.projects.map((p) => {
             if (p._id === action.payload._id) {
               return { ...action.payload, developers: p.developers };
             }
@@ -82,6 +82,7 @@ export const treeReducer = (state = initialState, action: Action): State => {
           });
           return m;
         }),
+
         currentlyEditingID: null,
       };
 
@@ -91,7 +92,7 @@ export const treeReducer = (state = initialState, action: Action): State => {
         managers: state.managers.map((m) => {
           m.projects.map((p) => {
             if (p._id === action.payload.projectId) {
-              p.developers = [...(p.developers || []), action.payload];
+              p.developers = [...p.developers, action.payload];
             }
             return p;
           });
@@ -104,7 +105,7 @@ export const treeReducer = (state = initialState, action: Action): State => {
         ...state,
         managers: state.managers.map((m) => {
           m.projects.map((p) => {
-            p.developers = (p.developers || []).filter(
+            p.developers = p.developers.filter(
               (d: any) => d._id !== action.payload._id
             );
             if (p._id === action.payload.projectId) {

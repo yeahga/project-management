@@ -1,6 +1,7 @@
 import api from 'api';
 import React from 'react';
 import { useDispatch } from 'react-redux';
+import { Link } from 'react-router-dom';
 
 import ProjectsTable from '@components/project/ProjectsTable';
 import useCurrentlyEditingID from '@hooks/useCurrentlyEditingID';
@@ -12,10 +13,6 @@ import { setCurrentlyEditingID } from '@redux/actions';
 
 import { ManagerProps } from '../@types';
 import EditManager from '../EditManager';
-
-const AddProjectDialog = React.lazy(
-  () => import('@components/project/AddProjectDialog')
-);
 
 export type ViewManagerProps = { manager: ManagerProps };
 
@@ -47,30 +44,18 @@ export default function ViewManager({ manager }: ViewManagerProps) {
       });
   };
 
-  const [isOpen, setIsOpen] = React.useState(false);
-
-  const handleOpen = () => {
-    setIsOpen(true);
-  };
-
-  const handleClose = () => {
-    setIsOpen(false);
-  };
-
   return (
     <div>
-      <Box
-        sx={{
-          '& button': {
-            m: 1,
-          },
-        }}
-      >
+      <Box sx={{ '& button': { m: 1 } }}>
         <div>
           <Button variant="contained" onClick={handleToggle}>
             {isEditing ? 'Cancel edit' : 'Edit Manager'}
           </Button>
-          <Button variant="contained" onClick={handleOpen}>
+          <Button
+            variant="contained"
+            component={Link}
+            to={`/add-project?managerId=${_id}`}
+          >
             Add Project
           </Button>
           <Button variant="contained" onClick={handleDelete}>
@@ -101,14 +86,6 @@ export default function ViewManager({ manager }: ViewManagerProps) {
           )}
         </Box>
       )}
-
-      <React.Suspense fallback={null}>
-        <AddProjectDialog
-          managerId={_id}
-          isOpen={isOpen}
-          onClose={handleClose}
-        />
-      </React.Suspense>
     </div>
   );
 }

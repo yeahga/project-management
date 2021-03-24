@@ -6,6 +6,6 @@ export default function useProjects() {
   const { managers } = useState();
 
   return React.useMemo(() => {
-    return managers.flatMap((m) => m.projects || []);
+    return managers.flatMap((m) => m.projects);
   }, [managers]);
 }

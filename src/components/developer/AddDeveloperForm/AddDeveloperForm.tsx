@@ -156,14 +156,8 @@ export default function AddDeveloperForm({
               ))}
             </NativeSelect>
           </FormControl>
-          <Box
-            sx={{
-              '& > *': {
-                m: 1,
-              },
-              marginTop: 2,
-            }}
-          >
+
+          <Box sx={{ '& > *': { m: 1 }, marginTop: 2 }}>
             <LoadingButton
               pending={isPending}
               variant="contained"
