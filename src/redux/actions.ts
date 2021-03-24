@@ -1,6 +1,15 @@
 import {
-    APPEND_DEVELOPER, APPEND_MANAGER, APPEND_PROJECT, DELETE_MANAGER, INIT,
-    SET_CURRENTLY_EDITING_ID, SET_ERROR, UPDATE_DEVELOPER, UPDATE_MANAGER, UPDATE_PROJECT
+  APPEND_DEVELOPER,
+  APPEND_MANAGER,
+  APPEND_PROJECT,
+  DELETE_MANAGER,
+  INIT,
+  MOVE_DEVELOPER,
+  SET_CURRENTLY_EDITING_ID,
+  SET_ERROR,
+  UPDATE_DEVELOPER,
+  UPDATE_MANAGER,
+  UPDATE_PROJECT,
 } from './actionTypes';
 
 export function init(payload: any) {
@@ -69,6 +78,13 @@ export function appendDeveloper(payload: any) {
 export function updateDeveloper(payload: any) {
   return {
     type: UPDATE_DEVELOPER,
+    payload,
+  };
+}
+
+export function moveDeveloper(payload: any) {
+  return {
+    type: MOVE_DEVELOPER,
     payload,
   };
 }
