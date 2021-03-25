@@ -20,7 +20,7 @@ export const getAllProjects = async (req: Request, res: Response) => {
 
 export const createProject = async (req: Request, res: Response) => {
   const type = 'project';
-  Project.create({ ...req.body, type }, (error, { _id }) => {
+  Project.create({ ...req.body, developers: [], type }, (error, { _id }) => {
     if (error) return res.json({ error });
     res.json({ success: true, data: { ...req.body, _id, type } });
   });

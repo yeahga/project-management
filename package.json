@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build back-end": "rmdir /Q /S build && tsc --build ./back-end/tsconfig.json",
+    "build back-end": "tsc --build ./back-end/tsconfig.json",
     "build front-end": "webpack --config webpack.config.js",
     "build all": "npm run \"build back-end\" && npm run \"build front-end\"",
     "run": "nodemon ./build/app.js",
