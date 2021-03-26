@@ -11,13 +11,16 @@ import AlertTitle from '@material-ui/core/AlertTitle';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
 import FormControl from '@material-ui/core/FormControl';
+import IconButton from '@material-ui/core/IconButton';
 import InputLabel from '@material-ui/core/InputLabel';
 import NativeSelect from '@material-ui/core/NativeSelect';
 import TextField from '@material-ui/core/TextField';
+import DeleteIcon from '@material-ui/icons/Delete';
 import LoadingButton from '@material-ui/lab/LoadingButton';
 import { appendProject, updateProject } from '@redux/actions';
 
 import { ProjectProps } from '../@types';
+import { useStyles } from './styles';
 
 type Optional<T, K extends string | number | symbol> = {
   [P in Exclude<keyof T, K>]?: T[P];
@@ -42,6 +45,7 @@ export default function AddProjectForm({
   const dispatch = useDispatch();
   const managers = useManagers();
   const history = useHistory();
+  const classes = useStyles();
 
   const [
     { project, error, isPending },
@@ -74,6 +78,16 @@ export default function AddProjectForm({
       field.value = event.target.value;
       return { ...state, project };
     });
+  };
+
+  const handleXFDelete = (idx: number) => () => {
+    setState((state) => ({
+      ...state,
+      project: {
+        ...state.project,
+        fields: state.project.fields.filter((_v, index) => index !== idx),
+      },
+    }));
   };
 
   const handleCreateProject = async (
@@ -174,58 +188,66 @@ export default function AddProjectForm({
       <Box sx={{ marginTop: 3 }}>
         <div>
           <form onSubmit={handleCreateProject}>
-            <TextField
-              autoFocus
-              margin="dense"
-              id="name"
-              label="Name"
-              type="text"
-              fullWidth
-              variant="standard"
-              value={project.name}
-              onChange={handleChange('name')}
-              required
-            />
-            <TextField
-              margin="dense"
-              id="description"
-              label="Description"
-              type="text"
-              fullWidth
-              variant="standard"
-              value={project.description}
-              onChange={handleChange('description')}
-              multiline
-            />
+            <div className={classes.formRow}>
+              <TextField
+                autoFocus
+                margin="dense"
+                id="name"
+                label="Name"
+                type="text"
+                variant="standard"
+                value={project.name}
+                onChange={handleChange('name')}
+                required
+              />
+            </div>
 
-            <FormControl fullWidth>
-              <InputLabel htmlFor="select-manager">Manager</InputLabel>
-              <NativeSelect
-                id="select-manager"
-                name="managerId"
-                value={project.managerId}
-                onChange={handleChange('managerId')}
-              >
-                {managers.map(({ _id, name }) => (
-                  <option key={_id} value={_id}>
-                    {name}
-                  </option>
-                ))}
-              </NativeSelect>
-            </FormControl>
+            <div className={classes.formRow}>
+              <TextField
+                margin="dense"
+                id="description"
+                label="Description"
+                type="text"
+                variant="standard"
+                value={project.description}
+                onChange={handleChange('description')}
+                multiline
+              />
+            </div>
+
+            <div className={classes.formRow}>
+              <FormControl>
+                <InputLabel htmlFor="select-manager">Manager</InputLabel>
+                <NativeSelect
+                  id="select-manager"
+                  name="managerId"
+                  value={project.managerId}
+                  onChange={handleChange('managerId')}
+                >
+                  {managers.map(({ _id, name }) => (
+                    <option key={_id} value={_id}>
+                      {name}
+                    </option>
+                  ))}
+                </NativeSelect>
+              </FormControl>
+            </div>
 
             {project.fields.map((field, idx) => (
-              <TextField
-                key={idx}
-                margin="dense"
-                label={field.name}
-                type="text"
-                fullWidth
-                variant="standard"
-                value={field.value}
-                onChange={handleXFChange(idx)}
-                required={field.isRequired}
-              />
+              <div key={idx} className={classes.formRow}>
+                <TextField
+                  margin="dense"
+                  label={field.name}
+                  type="text"
+                  variant="standard"
+                  value={field.value}
+                  onChange={handleXFChange(idx)}
+                  required={field.isRequired}
+                />
+                <IconButton type="button" onClick={handleXFDelete(idx)}>
+                  <DeleteIcon />
+                </IconButton>
+              </div>
             ))}
 
             <Box sx={{ '& > *': { m: 1 }, marginTop: 2 }}>
