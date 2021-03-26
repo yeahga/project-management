@@ -8,7 +8,7 @@ import Typography from '@material-ui/core/Typography';
 
 export default function AddProjectPage() {
   const query = useQuery();
-  const managerId = query.get('managerId');
+  const managerId = query.get('managerId') || '';
 
   return (
     <Box sx={{ width: '100%', marginTop: 1 }}>
@@ -17,7 +17,7 @@ export default function AddProjectPage() {
           Create a project
         </Typography>
         <Box sx={{ marginTop: 3 }}>
-          <AddProjectForm managerId={managerId} />
+          <AddProjectForm managerId={managerId} formType="__ADD_FORM__" />
         </Box>
       </div>
     </Box>

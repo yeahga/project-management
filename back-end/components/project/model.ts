@@ -11,6 +11,9 @@ const ProjectSchema = new Schema({
     type: String,
     required: true,
   },
+  fields: {
+    type: Array,
+  },
   managerId: { type: Schema.Types.ObjectId },
 });
 
