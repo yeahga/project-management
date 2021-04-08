@@ -28,7 +28,11 @@ export default function AddProjectDialog({
     >
       {isOpen && (
         <React.Suspense fallback={<CircularProgress />}>
-          <AddProjectForm onClose={handleClose} managerId={managerId} />
+          <AddProjectForm
+            formType="__ADD_FORM__"
+            onClose={handleClose}
+            managerId={managerId}
+          />
         </React.Suspense>
       )}
     </Dialog>

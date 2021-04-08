@@ -62,7 +62,7 @@ export const createManager = async (req: Request, res: Response) => {
   const type = 'manager';
   Manager.create({ ...req.body, type }, (error, { _id }) => {
     if (error) return void res.json({ error });
-    res.json({ success: true, data: { ...req.body, _id, type } });
+    res.json({ success: true, data: { ...req.body, projects: [], _id, type } });
   });
 };
 

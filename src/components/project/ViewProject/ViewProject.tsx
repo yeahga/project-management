@@ -76,14 +76,25 @@ export default function ViewProject({ project }: ViewProjectProps) {
         <Box sx={{ width: '100%', marginTop: 3 }}>
           {Object.entries(project).map(
             ([key, val], idx) =>
-              !['__v', '_id', 'managerId', 'type', 'developers'].includes(
-                key
-              ) && (
+              ![
+                '__v',
+                '_id',
+                'managerId',
+                'type',
+                'developers',
+                'fields',
+              ].includes(key) && (
                 <Typography key={idx} variant="h6" gutterBottom component="div">
                   {capitalize(key)}: {val}
                 </Typography>
               )
           )}
+          {Array.isArray(project.fields) &&
+            project.fields.map(({ name, value }, idx) => (
+              <Typography key={idx} variant="h6" gutterBottom component="div">
+                {`${name}: ${value}`}
+              </Typography>
+            ))}
           {Boolean(developers?.length) && (
             <div>
               <Typography variant="h6" gutterBottom component="div">
